@@ -2,7 +2,7 @@ from __future__ import annotations
 import json
 import pickle
 from dataclasses import dataclass
-from typing import Tuple, List, Dict
+from typing import Tuple, List
 
 import numpy as np
 import pandas as pd
