@@ -10,6 +10,7 @@ app = Flask(__name__)
 MODEL_PATH = os.environ.get("MODEL_PATH", "models/model.pkl")
 _model = None
 
+
 def _ensure_model():
     global _model
     if _model is None:
@@ -18,9 +19,11 @@ def _ensure_model():
         _model = load_model(MODEL_PATH)
     return _model
 
+
 @app.get("/health")
 def health():
     return jsonify({"status": "ok"})
+
 
 @app.post("/predict")
 def predict():

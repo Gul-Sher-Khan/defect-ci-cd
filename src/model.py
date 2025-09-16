@@ -14,7 +14,20 @@ from sklearn.metrics import (
 from sklearn.model_selection import StratifiedShuffleSplit
 
 # Minimal feature set expected in your dataset
-METRICS: List[str] = ['la','ld','nd','ns','nf','ent','ndev','nuc','age','aexp','asexp','arexp']
+METRICS: List[str] = [
+    'la',
+    'ld',
+    'nd',
+    'ns',
+    'nf',
+    'ent',
+    'ndev',
+    'nuc',
+    'age',
+    'aexp',
+    'asexp',
+    'arexp']
+
 
 def _prep(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
     df = df.copy()
@@ -23,9 +36,10 @@ def _prep(df: pd.DataFrame) -> Tuple[pd.DataFrame, pd.Series]:
     df['bugcount'] = pd.to_numeric(df['bugcount'], errors='coerce').fillna(0)
     y = (df['bugcount'] > 0).astype(int)
     if 'age' in df.columns:
-        df['age'] = pd.to_numeric(df['age'], errors='coerce')/3600/24
+        df['age'] = pd.to_numeric(df['age'], errors='coerce') / 3600 / 24
     X = df[METRICS].apply(pd.to_numeric, errors='coerce').fillna(0.0)
     return X, y
+
 
 def build_rf() -> RandomForestClassifier:
     return RandomForestClassifier(
@@ -36,6 +50,7 @@ def build_rf() -> RandomForestClassifier:
         oob_score=False, random_state=42, verbose=0, warm_start=False
     )
 
+
 @dataclass
 class TrainResult:
     auc: float
@@ -43,6 +58,7 @@ class TrainResult:
     precision: float
     recall: float
     accuracy: float
+
 
 def train_random_forest(csv_path: str):
     df = pd.read_csv(csv_path)
@@ -66,13 +82,16 @@ def train_random_forest(csv_path: str):
     )
     return clf, res
 
+
 def save_model(model: RandomForestClassifier, path: str) -> None:
     with open(path, "wb") as f:
         pickle.dump(model, f)
 
+
 def load_model(path: str) -> RandomForestClassifier:
     with open(path, "rb") as f:
         return pickle.load(f)
+
 
 def save_metrics(res: TrainResult, path: str) -> None:
     with open(path, "w", encoding="utf-8") as f:
