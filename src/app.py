@@ -14,9 +14,10 @@ _model = None
 def _ensure_model():
     global _model
     if _model is None:
-        if not os.path.exists(MODEL_PATH):
-            raise RuntimeError(f"Model file not found at {MODEL_PATH}. Train first.")
-        _model = load_model(MODEL_PATH)
+        model_path = os.environ.get("MODEL_PATH", "models/model.pkl")
+        if not os.path.exists(model_path):
+            raise RuntimeError(f"Model file not found at {model_path}. Train first.")
+        _model = load_model(model_path)
     return _model
 
 
