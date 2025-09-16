@@ -3,6 +3,7 @@ import os
 import argparse
 from model import train_random_forest, save_model, save_metrics
 
+
 def main():
     ap = argparse.ArgumentParser(description="Train RandomForest for defect prediction")
     ap.add_argument("--data", default="data/dataset.csv", help="Path to training CSV")
@@ -24,6 +25,7 @@ def main():
 
     print("[train] done")
     print(res.__dict__)
+
 
 if __name__ == "__main__":
     main()

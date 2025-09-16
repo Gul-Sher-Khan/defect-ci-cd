@@ -2,12 +2,13 @@
 import pandas as pd
 from src.model import train_random_forest, METRICS
 
+
 def test_train_end_to_end_small_df():
     # tiny balanced DF made in-memory for determinism
     n = 60
     data = {
         "commit_id": [f"c{i}" for i in range(n)],
-        "bugcount": [0]*(n//2) + [1]*(n - n//2),
+        "bugcount": [0] * (n // 2) + [1] * (n - n // 2),
     }
     for m in METRICS:
         data[m] = list(range(n))
@@ -15,7 +16,8 @@ def test_train_end_to_end_small_df():
 
     # write to a temporary CSV-like object via pandas to_csv -> string buffer is fine,
     # but train_random_forest expects a path, so we’ll use NamedTemporaryFile pattern:
-    import tempfile, os
+    import tempfile
+    import os
     with tempfile.TemporaryDirectory() as td:
         csv_path = os.path.join(td, "tmp.csv")
         df.to_csv(csv_path, index=False)
