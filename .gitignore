@@ -1,14 +1,6 @@
-# .gitignore
 .venv/
 __pycache__/
 *.pyc
-# keep ignoring the folder…
-models/
-# …but allow the production model file
-!models/model.pkl
-
 artifacts/
 .env
-*.pickle
-*.pkl
 *.log
