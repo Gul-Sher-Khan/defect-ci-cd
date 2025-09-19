@@ -12,20 +12,15 @@ pipeline {
   }
 
   stages {
-    stage("Checkout") {
-      when { branch "master" }
-      steps { checkout scm }
-    }
-
     stage("Docker Build") {
-      when { branch "master" }
       steps {
+        // Fail fast if Docker isn't available on the agent
+        sh 'docker version'
         sh "docker build -t ${IMAGE_TAG} -t ${LATEST_TAG} ."
       }
     }
 
     stage("Docker Push") {
-      when { branch "master" }
       steps {
         withCredentials([usernamePassword(credentialsId: "${DOCKERHUB_CRED}", usernameVariable: 'U', passwordVariable: 'P')]) {
           sh """
@@ -61,7 +56,8 @@ pipeline {
       )
     }
     cleanup {
-      sh 'docker image prune -f || true'
+      // Only prune if Docker exists on the agent
+      sh 'command -v docker >/dev/null 2>&1 && docker image prune -f || true'
     }
   }
 }
